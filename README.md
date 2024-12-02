@@ -1,3 +1,7 @@
+# ⚠️ WORK IN PROGRESS ⚠️
+
+> **Note**: This project is currently a work in progress and is being used to test Claude AI functionality. It is not intended for production use at this time. Features and documentation may be incomplete or subject to major changes.
+
 # SPM CLI
 
 Spinnaker Pipeline Management CLI for use with Cline integration.
@@ -45,4 +49,3 @@ npm run dev
 
 # Run tests
 npm test
-```
