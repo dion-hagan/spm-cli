@@ -1,11 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-
-interface Config {
-  spinnakerApiUrl: string;
-  spinnakerToken: string;
-}
+import { Config } from './types/spinnaker';
 
 class ConfigManager {
   private configPath: string;
@@ -51,4 +47,10 @@ class ConfigManager {
   }
 }
 
+// Export singleton instance
 export const config = new ConfigManager().get();
+
+// Export loadConfig function for CLI
+export async function loadConfig(): Promise<Config> {
+  return config;
+}
