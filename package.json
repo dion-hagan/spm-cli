@@ -1,5 +1,5 @@
 {
-  "name": "spm-cli",
+  "name": "@airjesus17/spm-cli",
   "version": "0.2.0",
   "description": "Spinnaker Pipeline Management CLI",
   "bin": {
@@ -11,6 +11,9 @@
     "start": "node ./dist/cli.js",
     "test": "jest",
     "pkg": "pkg ."
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "axios": "^1.6.2",
