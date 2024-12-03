@@ -45,12 +45,40 @@ class ConfigManager {
   get(): Config {
     return this.config;
   }
+
+  update(newConfig: Partial<Config>): void {
+    this.config = { ...this.config, ...newConfig };
+    const dirPath = path.dirname(this.configPath);
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+    fs.writeFileSync(
+      this.configPath,
+      JSON.stringify(this.config, null, 2)
+    );
+  }
+
+  validate(): boolean {
+    return Boolean(
+      this.config.spinnakerApiUrl &&
+      this.config.spinnakerToken
+    );
+  }
+
+  validateOrExit(): void {
+    if (!this.validate()) {
+      console.error('Invalid configuration. Please run "spm config" to set up your configuration.');
+      process.exit(1);
+    }
+  }
 }
 
 // Export singleton instance
-export const config = new ConfigManager().get();
+export const configManager = new ConfigManager();
+export const config = configManager.get();
 
 // Export loadConfig function for CLI
 export async function loadConfig(): Promise<Config> {
+  configManager.validateOrExit();
   return config;
 }

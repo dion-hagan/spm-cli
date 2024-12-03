@@ -13,17 +13,22 @@ export class SpinnakerError extends Error {
   }
 }
 
+interface SpinnakerErrorResponse {
+  message?: string;
+  [key: string]: any;
+}
+
 // Handles API errors and transforms them into user-friendly messages
 export function handleApiError(error: AxiosError): never {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
     const statusCode = error.response.status;
-    const details = error.response.data;
+    const details = error.response.data as SpinnakerErrorResponse;
     
     let message = `Spinnaker API Error (${statusCode}): `;
     
-    if (typeof details === 'object' && details.message) {
+    if (details && typeof details === 'object' && 'message' in details) {
       message += details.message;
     } else if (typeof details === 'string') {
       message += details;

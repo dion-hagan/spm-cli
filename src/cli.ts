@@ -3,16 +3,20 @@ import { Command } from 'commander';
 import { createPipelineCommand } from './commands/pipeline';
 import { createApplicationCommand } from './commands/application';
 import { createDeploymentCommand } from './commands/deployment';
-import { loadConfig } from './config';
+import { configCommand } from './commands/config';
+import { configManager } from './config';
 
 async function main() {
   const program = new Command();
-  const config = await loadConfig();
+  const config = configManager.get();
 
   program
     .name('spm')
     .description('Spinnaker Pipeline Management CLI')
     .version('0.1.0');
+
+  // Add config command
+  program.addCommand(configCommand);
 
   // Add commands with aliases
   const pipelineCmd = createPipelineCommand(config);
@@ -26,6 +30,13 @@ async function main() {
   const deploymentCmd = createDeploymentCommand(config);
   deploymentCmd.alias('d');
   program.addCommand(deploymentCmd);
+
+  // Add pre-command validation hook for all commands except config
+  program.hook('preAction', (thisCommand) => {
+    if (thisCommand.name() !== 'config') {
+      configManager.validateOrExit();
+    }
+  });
 
   await program.parseAsync();
 }

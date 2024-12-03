@@ -26,14 +26,16 @@ export function createPipelineCommand(config: Config): Command {
   // Execute pipeline
   pipeline.command('execute')
     .description('Execute a pipeline')
-    .argument('<id>', 'Pipeline ID')
+    .argument('<application>', 'Application Name')
+    .argument('<pipeline>', 'Pipeline Name')
     .option('-p, --params <json>', 'Pipeline parameters as JSON')
-    .action(async (id, options) => {
+    .action(async (pipeline, options) => {
       try {
         const client = new SpinnakerClient(config);
         const params = options.params ? JSON.parse(options.params) : {};
-        await client.executePipeline(id, params);
-        console.log(`Pipeline ${id} execution started`);
+        const id = await client.executePipeline(pipeline, params);
+        console.log(`Pipeline ${pipeline} execution started`);
+        console.log(`Link: ${id}`)
       } catch (error) {
         handleCommandError(error as Error);
       }

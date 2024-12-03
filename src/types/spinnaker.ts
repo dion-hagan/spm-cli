@@ -21,6 +21,7 @@ export interface PipelineStage {
   type: string;
   name: string;
   requisiteStageRefIds: string[];
+  status: string;
   // Additional stage-specific fields would go here
 }
 
